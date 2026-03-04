@@ -7,7 +7,7 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: valerysatsura/comfyui-sfw
+  IMAGE_NAME: lazyfans-com/comfyui-nsfw
 
 jobs:
   build:
@@ -43,10 +43,9 @@ jobs:
 
       - name: Make package public
         run: |
-          PKG=$(echo "${{ env.IMAGE_NAME }}" | cut -d/ -f2)
-          ORG=$(echo "${{ env.IMAGE_NAME }}" | cut -d/ -f1)
-          curl -s -X PATCH \
+          RESPONSE=$(curl -s -w "\nHTTP_STATUS:%{http_code}" -X PATCH \
             -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
             -H "Content-Type: application/json" \
             -d '{"visibility":"public"}' \
-            "https://api.github.com/orgs/${ORG}/packages/container/${PKG}" || true
+            "https://api.github.com/orgs/LazyFans-com/packages/container/comfyui-nsfw")
+          echo "Response: $RESPONSE"
