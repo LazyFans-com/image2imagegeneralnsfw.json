@@ -7,7 +7,7 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: lazyfans-com/comfyui-nsfw
+  IMAGE_NAME: valerysatsura/comfyui-sfw
 
 jobs:
   build:
