@@ -40,3 +40,13 @@ jobs:
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
           cache-from: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:buildcache
           cache-to: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:buildcache,mode=max
+
+      - name: Make package public
+        run: |
+          PKG=$(echo "${{ env.IMAGE_NAME }}" | cut -d/ -f2)
+          ORG=$(echo "${{ env.IMAGE_NAME }}" | cut -d/ -f1)
+          curl -s -X PATCH \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            -d '{"visibility":"public"}' \
+            "https://api.github.com/orgs/${ORG}/packages/container/${PKG}" || true
